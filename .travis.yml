@@ -30,7 +30,8 @@ before_script:
   - pear channel-discover pear.phpmd.org
   - pear channel-discover pear.pdepend.org
   - pear install pear/PHP_CodeSniffer
-  - pear install --alldeps phpmd/PHP_PMD
+  #- pear install --alldeps phpmd/PHP_PMD
+  - pear install phpmd/PHP_PMD
   - pear install phpunit/phpcpd
   # Install the phpcs and phpmd rulesets
   - git clone https://github.com/WMI/phpcs-rules.git /usr/share/php/PHP/CodeSniffer/Standards/WMIMagento
