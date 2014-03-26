@@ -50,7 +50,7 @@ before_script:
 
 script: 
   - phpunit ./Tests/
-  - phpcs --standard=WMIMagento ./
+  - phpcs --standard=/usr/share/php/PHP/CodeSniffer/Standards/WMIMagento ./
   - phpcpd ./
   - casperjs test Tests/Casperjs --url="localhost" --username=developer --password=music123
   - phpmd ./ text /usr/share/php/WMI/ruleset.xml
