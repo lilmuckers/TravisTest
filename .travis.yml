@@ -8,11 +8,10 @@ services:
   - mysql
 
 before_script:
-  - sudo apt-get update
+  # update apt
+  - sudo apt-get update -qq
+  # install apache and fastcgi module
   - sudo apt-get install apache2 libapache2-mod-fastcgi
-  - git clone git://github.com/n1k0/casperjs.git /tmp/casperjs/
-  - cd /tmp/casperjs
-  - ln -sf `pwd`/bin/casperjs /usr/local/bin/casperjs
   # enable php-fpm
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
   - sudo a2enmod rewrite actions fastcgi alias
@@ -22,21 +21,30 @@ before_script:
   - sudo cp -f .travis/apache/vhost.conf /etc/apache2/sites-available/default
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
   - sudo service apache2 restart
-  - git clone https://github.com/WMI/phpcs-rules.git /usr/share/php/PHP/CodeSniffer/Standards/WMIMagento
-  - git clone https://github.com/WMI/phpmd-rules.git /usr/share/php/WMI/
+  # Install casperjs
+  - git clone git://github.com/n1k0/casperjs.git /tmp/casperjs/
+  - cd /tmp/casperjs
+  - sudo ln -sf `pwd`/bin/casperjs /usr/local/bin/casperjs
+  # Install phpcs, phpmd, and so forth
   - pear channel-discover pear.phpunit.de
   - pear channel-discover pear.phpmd.org
   - pear channel-discover pear.pdepend.org
   - pear install pear/PHP_CodeSniffer
   - pear install --alldeps phpmd/PHP_PMD
   - pear install phpunit/phpcpd
-  - sudo apt-get update -qq
+  # Install the phpcs and phpmd rulesets
+  - git clone https://github.com/WMI/phpcs-rules.git /usr/share/php/PHP/CodeSniffer/Standards/WMIMagento
+  - git clone https://github.com/WMI/phpmd-rules.git /usr/share/php/WMI/
+  # Install  and start beanstalkd 
   - sudo apt-get install -qq beanstalkd
   - sudo beanstalkd -d -l 127.0.0.1 -p 11300
+  # Reload the PHP environment
   - phpenv rehash
+  # Setup the database
   - mysql -e 'create database wmi;'
   - wget http://files.qa1.wmiecom.com/travis_test.sql
   - mysql wmi < travis_test.sql
+  # Apply the travis specific configuration
   - rm config.ini
   - cp .travis/db/config.ini ./config.ini
 
