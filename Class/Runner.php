@@ -34,7 +34,7 @@ class Runner
      * @param string $host     the hostname for the db
      * @param string $username the username for the db
      * @param string $password the apssword for the db
-     * @param string $db       the database name
+     * @param string $database the database name
      * 
      * @return void
      * 
