@@ -1,0 +1,45 @@
+language: php
+
+php:
+  - 5.5
+  - 5.4
+
+services:
+  - mysql
+
+before_script:
+  - sudo apt-get install apache2 libapache2-mod-fastcgi
+  - sudo npm install -g casperjs
+  # enable php-fpm
+  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - sudo a2enmod rewrite actions fastcgi alias
+  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+  # configure apache virtual hosts
+  - sudo cp -f .travis/apache/vhost.conf /etc/apache2/sites-available/default
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
+  - sudo service apache2 restart
+  - git clone https://github.com/WMI/phpcs-rules.git /usr/share/php/PHP/CodeSniffer/Standards/WMIMagento
+  - git clone https://github.com/WMI/phpmd-rules.git /usr/share/php/WMI/
+  - pear channel-discover pear.phpunit.de
+  - pear channel-discover pear.phpmd.org
+  - pear channel-discover pear.pdepend.org
+  - pear install pear/PHP_CodeSniffer
+  - pear install --alldeps phpmd/PHP_PMD
+  - pear install phpunit/phpcpd
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq beanstalkd
+  - sudo beanstalkd -d -l 127.0.0.1 -p 11300
+  - phpenv rehash
+  - mysql -e 'create database wmi;'
+  - wget http://files.qa1.wmiecom.com/travis_test.sql
+  - mysql wmi < travis_test.sql
+  - rm config.ini
+  - cp .travis/db/config.ini ./config.ini
+
+script: 
+  - phpunit ./Tests/
+  - phpcs --standard=WMIMagento app/code/local/
+  - phpcpd app/code/local/
+  - casperjs test Tests/Casperjs --url="localhost" --username=developer --password=music123
+  - phpmd app/code/local/ text /usr/share/php/WMI/ruleset.xml
