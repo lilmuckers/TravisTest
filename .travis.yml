@@ -47,6 +47,7 @@ before_script:
   # Apply the travis specific configuration
   - rm config.ini
   - cp .travis/db/config.ini ./config.ini
+  - mkdir /tmp/output/
 
 script: 
   - phpcs --report=checkstyle --report-file=/tmp/output/checkstyle.xml --standard=/usr/share/php/PHP/CodeSniffer/Standards/WMIMagento ./
