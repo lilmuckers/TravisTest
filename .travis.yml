@@ -49,8 +49,15 @@ before_script:
   - cp .travis/db/config.ini ./config.ini
 
 script: 
-  - phpunit ./Tests/
-  - phpcs --standard=/usr/share/php/PHP/CodeSniffer/Standards/WMIMagento ./
-  - phpcpd ./
-  - casperjs test Tests/Casperjs --url="localhost" --username=developer --password=music123
-  - phpmd ./ text /usr/share/php/WMI/ruleset.xml
+  - phpcs --report=checkstyle --report-file=/tmp/output/checkstyle.xml --standard=/usr/share/php/PHP/CodeSniffer/Standards/WMIMagento ./
+  - phpmd ./ xml /usr/share/php/WMI/ruleset.xml --reportfile /tmp/output/mess.xml
+  - phpcpd ./ --log-pmd /tmp/output/cpd.xml
+  - casperjs test Tests/Casperjs --xunit=/tmp/output/functional.xml --url="localhost" --username=developer --password=music123
+  - phpunit --log-junit=/tmp/output/unit.xml ./Tests/
+
+after_script:
+  - cat /tmp/output/checkstyle.xml
+  - cat /tmp/output/mess.xml
+  - cat /tmp/output/cpd.xml
+  - cat /tmp/output/functional.xml
+  - cat /tmp/output/unit.xml
