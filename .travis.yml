@@ -8,6 +8,7 @@ services:
   - mysql
 
 before_script:
+  - sudo apt-get update
   - sudo apt-get install apache2 libapache2-mod-fastcgi
   - sudo npm install -g casperjs
   # enable php-fpm
