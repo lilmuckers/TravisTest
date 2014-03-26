@@ -10,7 +10,9 @@ services:
 before_script:
   - sudo apt-get update
   - sudo apt-get install apache2 libapache2-mod-fastcgi
-  - sudo npm install -g casperjs
+  - git clone git://github.com/n1k0/casperjs.git /tmp/casperjs/
+  - cd /tmp/casperjs
+  - ln -sf `pwd`/bin/casperjs /usr/local/bin/casperjs
   # enable php-fpm
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
   - sudo a2enmod rewrite actions fastcgi alias
