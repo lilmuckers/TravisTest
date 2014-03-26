@@ -23,7 +23,6 @@ before_script:
   - sudo service apache2 restart
   # Install casperjs
   - git clone git://github.com/n1k0/casperjs.git /tmp/casperjs/
-  - cd /tmp/casperjs
   - sudo ln -sf `pwd`/bin/casperjs /usr/local/bin/casperjs
   # Install phpcs, phpmd, and so forth
   - pear channel-discover pear.phpunit.de
@@ -46,8 +45,7 @@ before_script:
   - wget http://files.qa1.wmiecom.com/travis_test.sql
   - mysql wmi < travis_test.sql
   # Apply the travis specific configuration
-  - ls
-  #- rm config.ini
+  - rm config.ini
   - cp .travis/db/config.ini ./config.ini
 
 script: 
