@@ -46,7 +46,8 @@ before_script:
   - wget http://files.qa1.wmiecom.com/travis_test.sql
   - mysql wmi < travis_test.sql
   # Apply the travis specific configuration
-  - rm config.ini
+  - ls
+  #- rm config.ini
   - cp .travis/db/config.ini ./config.ini
 
 script: 
