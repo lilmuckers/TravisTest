@@ -57,6 +57,7 @@ script:
   - phpunit --log-junit=/tmp/output/unit.xml ./Tests/
 
 after_script:
+  - ls -lasth /tmp/output/
   - cat /tmp/output/checkstyle.xml
   - cat /tmp/output/mess.xml
   - cat /tmp/output/cpd.xml
