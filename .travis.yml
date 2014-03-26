@@ -34,8 +34,8 @@ before_script:
   - pear install phpmd/PHP_PMD
   - pear install phpunit/phpcpd
   # Install the phpcs and phpmd rulesets
-  - git clone https://github.com/WMI/phpcs-rules.git /usr/share/php/PHP/CodeSniffer/Standards/WMIMagento
-  - git clone https://github.com/WMI/phpmd-rules.git /usr/share/php/WMI/
+  - sudo git clone https://github.com/WMI/phpcs-rules.git /usr/share/php/PHP/CodeSniffer/Standards/WMIMagento
+  - sudo git clone https://github.com/WMI/phpmd-rules.git /usr/share/php/WMI/
   # Install  and start beanstalkd 
   - sudo apt-get install -qq beanstalkd
   - sudo beanstalkd -d -l 127.0.0.1 -p 11300
